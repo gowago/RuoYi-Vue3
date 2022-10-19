@@ -2,13 +2,7 @@ import request, { $get, $post } from "@/utils/request";
 
 // 登录方法
 export function login(username, password, code, uuid) {
-  return $post(
-    "/login",
-    { username, password, code, uuid },
-    {
-      header: { is }
-    }
-  );
+  return $post("/login", { username, password, code, uuid }, { headers: { isToken: false } });
 }
 
 // 注册方法
@@ -41,12 +35,5 @@ export function logout() {
 
 // 获取验证码
 export function getCodeImg() {
-  return request({
-    url: "/captchaImage",
-    headers: {
-      isToken: false
-    },
-    method: "get",
-    timeout: 20000
-  });
+  return $get("/captchaImage", {}, { headers: { isToken: false }, timeout: 2000 });
 }

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { type AxiosRequestConfig } from "axios";
 import { ElNotification, ElMessageBox, ElMessage, ElLoading } from "element-plus";
 import { getToken } from "@/utils/auth";
 import errorCode from "@/utils/errorCode";
@@ -9,7 +9,7 @@ import useUserStore from "@/store/modules/user";
 
 let downloadLoadingInstance;
 // 是否显示重新登录
-export let isRelogin = { show: false };
+export const isRelogin = { show: false };
 
 axios.defaults.headers["Content-Type"] = "application/json;charset=utf-8";
 // 创建axios实例
@@ -170,18 +170,18 @@ export function download(url, params, filename, config) {
 
 export default service;
 
-export function $post(url, data, config: AxiosRequestConfig & { header?: { isToken?: boolean } }) {
+export function $post(url, data, config: AxiosRequestConfig & { headers?: { isToken?: boolean } }) {
   return service({
     url,
-    headers,
     method: "post",
-    data
+    data,
+    ...config
   });
 }
-export function $get(url: string, params, headers: AxiosRequestConfig & { header?: { isToken?: boolean } }) {
+export function $get(url: string, params = {}, config: AxiosRequestConfig & { headers?: { isToken?: boolean } }) {
   return service({
     url,
-    headers,
+    ...config,
     method: "get",
     params
   });
