@@ -34,14 +34,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="创建时间" style="width: 308px">
-            <el-date-picker
-              v-model="dateRange"
-              value-format="YYYY-MM-DD"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            />
+            <my-date-picker v-model:start-time="queryParams.beginTime" v-model:end-time="queryParams.endTime" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -233,7 +226,11 @@
     </el-dialog>
   </div>
 </template>
-
+<script>
+export default {
+  name: "User"
+};
+</script>
 <script setup name="User">
 import { getToken } from "@/utils/auth";
 import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser, deptTreeSelect } from "@/api/system/user";
@@ -328,7 +325,7 @@ function getDeptTree() {
 /** 查询用户列表 */
 function getList() {
   loading.value = true;
-  listUser(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
+  listUser(queryParams).then(res => {
     loading.value = false;
     userList.value = res.rows;
     total.value = res.total;
