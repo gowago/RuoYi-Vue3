@@ -5,10 +5,15 @@ import createSvgIcon from "./svg-icon";
 import createCompression from "./compression";
 import createSetupExtend from "./setup-extend";
 import createUnPlugin from "./unplugin";
-
+import vueJsx from "@vitejs/plugin-vue-jsx";
 export default function createVitePlugins(viteEnv, isBuild = false) {
   console.log("🚀 ~ file: index.js ~ line 9 ~ createVitePlugins ~ isBuild", isBuild);
-  const vitePlugins = [vue()];
+  const vitePlugins = [
+    vue(),
+    vueJsx({
+      // options are passed on to @vue/babel-plugin-jsx
+    })
+  ];
   vitePlugins.push(createAutoImport());
   // vitePlugins.push(createUnPlugin());
 
