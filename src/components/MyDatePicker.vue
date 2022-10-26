@@ -11,16 +11,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { isEmpty } from "element-plus/lib/utils/types";
+import { computed, watch } from "vue";
 
 const props = defineProps<{
   startTime: string;
   endTime: string;
+  range?: [];
 }>();
 
 const emit = defineEmits<{
-  (event: "update:startTime", id: string): string;
-  (event: "update:endTime", id: string): string;
+  (event: "update:startTime", time: string): string;
+  (event: "update:endTime", time: string): string;
 }>();
 
 const dateRange = computed({
@@ -28,10 +30,20 @@ const dateRange = computed({
     return [props.startTime, props.endTime];
   },
   set: val => {
-    emit("update:startTime", val[0]);
-    emit("update:endTime", val[1]);
+    if (isEmpty(val)) {
+      emit("update:startTime", "");
+      emit("update:endTime", "");
+    } else {
+      emit("update:startTime", val[0]);
+      emit("update:endTime", val[1]);
+    }
   }
 });
+
+watch(
+  () => props.range,
+  () => {}
+);
 </script>
 
 <style scoped></style>

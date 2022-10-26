@@ -69,3 +69,22 @@ yarn dev
 ## pnpm 使用
 
 This file ends without a newline.
+
+
+## 开发规范与经验(待完善)
+1.vue sfc 文件 代码不应超过500行(良好的代码习惯)
+2.tabe组件column 可使用  tsx column
+3.同一大份表单需拆分多个组件(理由 1可复用 2逻辑清晰 3不臃肿)
+3.dialog组件可单独写成组件(理由 1可复用 2逻辑清晰 3不臃肿)
+4.可使用传送门(telport)解决函数变量不在同一组件的问题
+5.公共组件应当添加ts类型注释，并在vscode配置一键呼出功能
+e.g. {
+  "Basic: custom el-date-picker": {
+    "prefix": "my-date-picker",
+    "body": [
+      "<my-date-picker v-model:start-time=\"${1:test.startTime}\" v-model:end-time=\"${2:test.endTime}\" ${3| ,value-format=\"YYYY-MM-DD\"|} ${4| ,start-placeholder=\"\"|} ${5| ,end-placeholder=\"\"|}/>"
+    ],
+    "description": "Element UI custom date picker"
+  }
+}
+6

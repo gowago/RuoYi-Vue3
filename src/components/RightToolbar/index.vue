@@ -12,12 +12,7 @@
       </el-tooltip>
     </el-row>
     <el-dialog :title="title" v-model="open" append-to-body>
-      <el-transfer
-        :titles="['显示', '隐藏']"
-        v-model="value"
-        :data="columns"
-        @change="dataChange"
-      ></el-transfer>
+      <el-transfer :titles="['显示', '隐藏']" v-model="value" :data="columns" @change="dataChange"></el-transfer>
     </el-dialog>
   </div>
 </template>
@@ -26,22 +21,22 @@
 const props = defineProps({
   showSearch: {
     type: Boolean,
-    default: true,
+    default: true
   },
   columns: {
-    type: Array,
+    type: Array
   },
   search: {
     type: Boolean,
-    default: true,
+    default: true
   },
   gutter: {
     type: Number,
-    default: 10,
-  },
-})
+    default: 10
+  }
+});
 
-const emits = defineEmits(['update:showSearch', 'queryTable']);
+const emits = defineEmits(["update:showSearch", "queryTable"]);
 
 // 显隐数据
 const value = ref([]);
@@ -89,7 +84,7 @@ for (let item in props.columns) {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 :deep(.el-transfer__button) {
   border-radius: 50%;
   display: block;

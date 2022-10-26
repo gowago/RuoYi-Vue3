@@ -32,6 +32,8 @@ import Pagination from "@/components/Pagination";
 import RightToolbar from "@/components/RightToolbar";
 // 自定义日期
 import MyDatePicker from "@/components/MyDatePicker";
+
+import MyTable from "@/components/MyTable";
 // 文件上传组件
 import FileUpload from "@/components/FileUpload";
 // 图片上传组件
@@ -64,6 +66,7 @@ app.component("ImageUpload", ImageUpload);
 app.component("ImagePreview", ImagePreview);
 app.component("RightToolbar", RightToolbar);
 app.component("MyDatePicker", MyDatePicker);
+app.component("MyTable", MyTable);
 app.use(router);
 app.use(store);
 app.use(plugins);
