@@ -6,6 +6,7 @@ import ElementPlus from "element-plus";
 import locale from "element-plus/lib/locale/lang/zh-cn"; // 中文语言
 
 import "@/assets/styles/index.scss"; // global css
+import "@/assets/styles/app.less"; // global css
 
 import App from "./App";
 import store from "./store";
@@ -45,6 +46,8 @@ import TreeSelect from "@/components/TreeSelect";
 // 字典标签组件
 import DictTag from "@/components/DictTag";
 
+// 部门组件
+import MyDepartment from "@/components/platform/MyDepartment";
 const app = createApp(App);
 
 // 全局方法挂载
@@ -67,6 +70,8 @@ app.component("ImagePreview", ImagePreview);
 app.component("RightToolbar", RightToolbar);
 app.component("MyDatePicker", MyDatePicker);
 app.component("MyTable", MyTable);
+app.component("MyDepartment", MyDepartment); // 部门组件
+
 app.use(router);
 app.use(store);
 app.use(plugins);

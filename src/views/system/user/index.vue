@@ -3,26 +3,12 @@
     <el-row :gutter="20">
       <!--部门数据-->
       <el-col :span="4" :xs="24">
-        <div class="head-container">
-          <el-input v-model="deptName" placeholder="请输入部门名称" clearable prefix-icon="Search" style="margin-bottom: 20px" />
-        </div>
-        <div class="head-container">
-          <el-tree
-            :data="deptOptions"
-            :props="{ label: 'label', children: 'children' }"
-            :expand-on-click-node="false"
-            :filter-node-method="filterNode"
-            ref="deptTreeRef"
-            highlight-current
-            default-expand-all
-            @node-click="handleNodeClick"
-          />
-        </div>
+        <my-department @getDepart="data => (queryParams.value.deptId = data.id)"></my-department>
       </el-col>
       <!--用户数据-->
       <el-col :span="20" :xs="24">
-        <my-table :data="userList" @selection-change="handleSelectionChange" @getList="getList" ref="refTable">
-          <template #search="{ searchQuery }">
+        <my-table :data="userList" tableName="用户管理列表" @selection-change="handleSelectionChange" @getList="getList" ref="refTable">
+          <template #searchForm="{ searchQuery }">
             <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
               <el-form-item label="用户名称" prop="userName">
                 <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable style="width: 240px" @keyup.enter="searchQuery" />
@@ -46,32 +32,34 @@
             </el-form>
           </template>
 
-          <template #tool="{ searchTable }">
-            <el-row :gutter="10" class="mb8">
-              <el-col :span="1.5">
-                <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['system:user:add']">新增</el-button>
-              </el-col>
-              <el-col :span="1.5">
-                <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate" v-hasPermi="['system:user:edit']">修改</el-button>
-              </el-col>
-              <el-col :span="1.5">
-                <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete" v-hasPermi="['system:user:remove']">删除</el-button>
-              </el-col>
-              <el-col :span="1.5">
-                <el-button type="info" plain icon="Upload" @click="handleImport" v-hasPermi="['system:user:import']">导入</el-button>
-              </el-col>
-              <el-col :span="1.5">
-                <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['system:user:export']">导出</el-button>
-              </el-col>
-              <right-toolbar v-model:showSearch="showSearch" @queryTable="searchTable" :columns="columns" />
-            </el-row>
+          <template #tableTool="{ searchTable }">
+            <el-col :span="1.5">
+              <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['system:user:add']">新增</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate" v-hasPermi="['system:user:edit']">修改</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete" v-hasPermi="['system:user:remove']">删除</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button type="info" plain icon="Upload" @click="handleImport" v-hasPermi="['system:user:import']">导入</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['system:user:export']">导出</el-button>
+            </el-col>
           </template>
 
           <template #column>
-            <render-co :dict="parseTime" @handleStatusChange="handleStatusChange"></render-co>
-            <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
+            <render-co :parse="parseTime" co="systemUser" @handleStatusChange="handleStatusChange"></render-co>
+            <render-co-handle width="250" :config="['look', 'update']" @update="handleUpdate(row)" v-slot="{ row }">
+              <el-button :text="true" size="small" type="primary" @click="handleAuthRole(row)" v-hasPermi="['system:user:edit']">分配角色</el-button>
+              <el-button :text="true" size="small" type="primary" @click="handleResetPwd(row)" v-hasPermi="['system:user:resetPwd']">重置密码</el-button>
+            </render-co-handle>
+
+            <!-- <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
               <template #default="scope">
-                <el-button type="primary" size="small" @click="handleUpdate(scope.row)">查看</el-button>
+                <el-button type="primary" size="small" :text="true" @click="handleUpdate(scope.row)">查看</el-button>
 
                 <el-tooltip content="修改" placement="top" v-if="scope.row.userId !== 1">
                   <el-link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']" />
@@ -79,14 +67,15 @@
                 <el-tooltip content="删除" placement="top" v-if="scope.row.userId !== 1">
                   <el-link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']" />
                 </el-tooltip>
-                <el-tooltip content="重置密码" placement="top" v-if="scope.row.userId !== 1">
-                  <el-link type="primary" icon="Key" @click="handleResetPwd(scope.row)" v-hasPermi="['system:user:resetPwd']" />
-                </el-tooltip>
-                <el-tooltip content="分配角色" placement="top" v-if="scope.row.userId !== 1">
-                  <el-link type="primary" icon="CircleCheck" @click="handleAuthRole(scope.row)" v-hasPermi="['system:user:edit']" />
-                </el-tooltip>
+                  <el-tooltip content="重置密码" placement="top" v-if="scope.row.userId !== 1">
+                <el-link type="primary" icon="Key" @click="handleResetPwd(scope.row)" v-hasPermi="['system:user:resetPwd']" />
+              </el-tooltip>
+              <el-tooltip content="分配角色" placement="top" v-if="scope.row.userId !== 1">
+                <el-link type="primary" icon="CircleCheck" @click="handleAuthRole(scope.row)" v-hasPermi="['system:user:edit']" />
+              </el-tooltip>
+           
               </template>
-            </el-table-column>
+            </el-table-column> -->
           </template>
         </my-table>
       </el-col>
@@ -94,7 +83,7 @@
 
     <!-- 添加或修改用户配置对话框 -->
     <el-dialog :title="title" v-model="open" width="600px" append-to-body>
-      <el-form :model="form" :rules="rules" ref="userRef" label-width="80px">
+      <el-form :model="form" :rules="sysRules" ref="userRef" label-width="80px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="用户昵称" prop="nickName">
@@ -187,36 +176,7 @@
     </el-dialog>
 
     <!-- 用户导入对话框 -->
-    <el-dialog :title="upload.title" v-model="upload.open" width="400px" append-to-body>
-      <el-upload
-        ref="uploadRef"
-        :limit="1"
-        accept=".xlsx, .xls"
-        :headers="upload.headers"
-        :action="upload.url + '?updateSupport=' + upload.updateSupport"
-        :disabled="upload.isUploading"
-        :on-progress="handleFileUploadProgress"
-        :on-success="handleFileSuccess"
-        :auto-upload="false"
-        drag
-      >
-        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <template #tip>
-          <div class="el-upload__tip text-center">
-            <div class="el-upload__tip"><el-checkbox v-model="upload.updateSupport" />是否更新已经存在的用户数据</div>
-            <span>仅允许导入xls、xlsx格式文件。</span>
-            <el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline" @click="importTemplate">下载模板</el-link>
-          </div>
-        </template>
-      </el-upload>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button type="primary" @click="submitFileForm">确 定</el-button>
-          <el-button @click="upload.open = false">取 消</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    <el-dialog :title="upload.title" v-model="upload.open" width="400px" append-to-body> </el-dialog>
   </div>
 </template>
 <script>
@@ -226,9 +186,9 @@ export default {
 </script>
 <script setup name="User">
 import { getToken } from "@/utils/auth";
-import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser, deptTreeSelect } from "@/api/system/user";
-import renderCo from "@/mock/test";
-import renderCoa from "@/mock/testa";
+import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser } from "@/api/system/user";
+import renderCo, { renderCoHandle } from "@/mock/test";
+import { sysRules } from "@/mock/rules";
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable, sys_user_sex } = proxy.useDict("sys_normal_disable", "sys_user_sex");
@@ -242,7 +202,6 @@ const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const title = ref("");
-const deptName = ref("");
 const deptOptions = ref(undefined);
 const initPassword = ref(undefined);
 const postOptions = ref([]);
@@ -262,16 +221,6 @@ const upload = reactive({
   // 上传的地址
   url: import.meta.env.VITE_APP_BASE_API + "/system/user/importData"
 });
-// 列显隐信息
-const columns = ref([
-  { key: 0, label: `用户编号`, visible: true },
-  { key: 1, label: `用户名称`, visible: true },
-  { key: 2, label: `用户昵称`, visible: true },
-  { key: 3, label: `部门`, visible: true },
-  { key: 4, label: `手机号码`, visible: true },
-  { key: 5, label: `状态`, visible: true },
-  { key: 6, label: `创建时间`, visible: true }
-]);
 
 const data = reactive({
   form: {},
@@ -283,39 +232,11 @@ const data = reactive({
     beginTime: "",
     endTime: "",
     range: []
-  },
-  rules: {
-    userName: [
-      { required: true, message: "用户名称不能为空", trigger: "blur" },
-      { min: 2, max: 20, message: "用户名称长度必须介于 2 和 20 之间", trigger: "blur" }
-    ],
-    nickName: [{ required: true, message: "用户昵称不能为空", trigger: "blur" }],
-    password: [
-      { required: true, message: "用户密码不能为空", trigger: "blur" },
-      { min: 5, max: 20, message: "用户密码长度必须介于 5 和 20 之间", trigger: "blur" }
-    ],
-    email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
-    phonenumber: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
   }
 });
 
-const { queryParams, form, rules } = toRefs(data);
+const { queryParams, form } = toRefs(data);
 
-/** 通过条件过滤节点  */
-const filterNode = (value, data) => {
-  if (!value) return true;
-  return data.label.indexOf(value) !== -1;
-};
-/** 根据名称筛选部门树 */
-watch(deptName, val => {
-  proxy.$refs["deptTreeRef"].filter(val);
-});
-/** 查询部门下拉树结构 */
-function getDeptTree() {
-  deptTreeSelect().then(response => {
-    deptOptions.value = response.data;
-  });
-}
 /** 查询用户列表 */
 function getList(pageNum, pageSize, { setTotal, endLoading }) {
   listUser({ ...queryParams.value, pageNum, pageSize }).then(res => {
@@ -323,11 +244,6 @@ function getList(pageNum, pageSize, { setTotal, endLoading }) {
     userList.value = res.rows;
     setTotal(res.total);
   });
-}
-/** 节点单击事件 */
-function handleNodeClick(data) {
-  queryParams.value.deptId = data.id;
-  refTable.value.searchQuery();
 }
 
 /** 重置按钮操作 */
@@ -389,6 +305,7 @@ function handleCommand(command, row) {
 }
 /** 跳转角色分配 */
 function handleAuthRole(row) {
+  debugger;
   const userId = row.userId;
   router.push("/system/user-auth/role/" + userId);
 }
@@ -478,6 +395,7 @@ function handleAdd() {
 }
 /** 修改按钮操作 */
 function handleUpdate(row) {
+  debugger;
   reset();
   const userId = row.userId || ids.value;
   getUser(userId).then(response => {
@@ -511,6 +429,5 @@ function submitForm() {
     }
   });
 }
-
-getDeptTree();
 </script>
+<style scoped lang="scss"></style>

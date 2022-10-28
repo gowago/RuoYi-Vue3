@@ -33,15 +33,14 @@ export default () => [
   { key: "key12", label: "key12" }
 ];
 
-export const systemUserColumn = (dict, $emit) => {
-  console.log("🚀 ~ file: template.jsx ~ line 37 ~ systemUserColumn ~ dict", dict, $emit);
+export const systemUserColumn = (parse, $emit) => {
   return wrap([
     { prop: "userId", label: "用户编号" },
     { prop: "userName", label: "用户名称" },
     { prop: "nickName", label: "用户昵称" },
     { prop: "dept.deptName", label: "部门" },
     { prop: "phonenumber", label: "手机号码", width: 120 },
-    { prop: "createTime", label: "创建时间", width: 160, formatter: row => dict(row.createTime) },
+    { prop: "createTime", label: "创建时间", width: 160, formatter: row => parse(row.createTime) },
     {
       label: "状态",
       width: 160,
