@@ -48,6 +48,8 @@ import DictTag from "@/components/DictTag";
 
 // 部门组件
 import MyDepartment from "@/components/platform/MyDepartment";
+import FileUploadDialog from "@/components/common/FileUploadDialog";
+
 const app = createApp(App);
 
 // 全局方法挂载
@@ -69,9 +71,9 @@ app.component("ImageUpload", ImageUpload);
 app.component("ImagePreview", ImagePreview);
 app.component("RightToolbar", RightToolbar);
 app.component("MyDatePicker", MyDatePicker);
-app.component("MyTable", MyTable);
+app.component("MyTable", MyTable); //列表套件
 app.component("MyDepartment", MyDepartment); // 部门组件
-
+app.component("FileUploadDialog", FileUploadDialog); // 上传dialog
 app.use(router);
 app.use(store);
 app.use(plugins);
