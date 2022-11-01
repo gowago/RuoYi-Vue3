@@ -42,6 +42,7 @@ export const constantRoutes = [
     component: () => import("@/views/login"),
     hidden: true
   },
+
   {
     path: "/register",
     component: () => import("@/views/register"),
@@ -56,6 +57,32 @@ export const constantRoutes = [
     path: "/401",
     component: () => import("@/views/error/401"),
     hidden: true
+  },
+  {
+    path: "",
+    component: Layout,
+    name: "supplier",
+    meta: { title: "供应商管理", icon: "dashboard" },
+    children: [
+      {
+        path: "/supplier/home",
+        name: "home",
+        component: () => import("@/views/supplier/supplierAdd"),
+        meta: { title: "供应商管理", icon: "dashboard" }
+      },
+      {
+        path: "/supplier/test",
+        name: "test",
+        component: () => import("@/views/supplier/supplierAdd"),
+        meta: { title: "供应商测试", icon: "dashboard" }
+      },
+      {
+        path: "/supplier/add",
+        name: "新增供应商",
+        component: () => import("@/views/supplier/supplierAdd"),
+        hidden: true
+      }
+    ]
   },
   {
     path: "",

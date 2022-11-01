@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     <el-row :gutter="20">
       <!--部门数据-->
       <el-col :span="4" :xs="24">
@@ -188,6 +189,7 @@ export default {
 import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser } from "@/api/system/user";
 import renderCo, { renderCoHandle } from "@/mock/test";
 import { sysRules } from "@/mock/rules";
+import Breadcrumb from "@/components/Breadcrumb";
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable, sys_user_sex } = proxy.useDict("sys_normal_disable", "sys_user_sex");
