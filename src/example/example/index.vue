@@ -9,6 +9,7 @@
       :column="column"
     />
   </div>
+  <div>11</div>
 </template>
 
 <script setup name="phoneAbnormalQuery">
