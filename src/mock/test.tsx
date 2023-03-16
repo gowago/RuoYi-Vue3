@@ -16,7 +16,9 @@ export default function (props: typeProps, { emit }): FunctionalComponent {
     if (co.render) {
       return (
         <el-table-column label={co.label} align={co.align} width={co.width}>
-          {scope => co.render(scope)}
+          {scope => {
+            return co.render(scope);
+          }}
         </el-table-column>
       );
     } else {

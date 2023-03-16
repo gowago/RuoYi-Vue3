@@ -15,7 +15,7 @@
     </div>
 
     <div class="form-content">
-      <el-form :model="form" ref="form" :rules="rules" label-width="80px" :inline="false" size="normal">
+      <el-form :model="form" ref="form" :rules="rules" label-width="140px" :inline="false" size="normal">
         <div class="content-item bg-white px-12 py-30 mb-10">
           <h3>基础信息</h3>
           <el-row>
@@ -33,19 +33,60 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-select value-key="" placeholder="" clearable filterable>
-                <el-option v-for="item in dict.options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-              </el-select>
+              <el-form-item label="权益销售类型" required>
+                <el-select value-key="" placeholder="" clearable filterable>
+                  <el-option v-for="item in dict.options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
             <el-col :span="16">
               <el-form-item label="企业注册地址" required>
                 <el-input placeholder="请输入企业名称"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="同一社会信用代码" required>
+                <el-input placeholder="请输入"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="法人负责人" required>
+                <el-input placeholder="请输入"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="企业联系方式" required>
+                <el-input placeholder="请输入"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="企业邮箱" required>
+                <el-input placeholder="请输入"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="法人身份证(含正反面)" required>
+                <file-upload></file-upload>
+              </el-form-item>
+            </el-col>
           </el-row>
         </div>
         <div class="content-item bg-white px-12 py-30 mb-10">
           <h3>基础信息</h3>
+          <div>
+            <el-form :model="form" ref="form" label-width="80px" :inline="false" size="normal" class="w-300">
+              <el-form-item label="姓名">
+                <el-input></el-input>
+              </el-form-item>
+              <el-form-item label="联系方式">
+                <el-input></el-input>
+              </el-form-item>
+              <el-form-item label="职务">
+                <el-input></el-input>
+              </el-form-item>
+            </el-form>
+            <div class="300"></div>
+          </div>
         </div>
         <div class="content-item bg-white px-12 py-30">
           <h3>基础信息</h3>
